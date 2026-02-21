@@ -8,3 +8,4 @@ To handle:
 - [ ] promotional bonds
 - [ ] general decision optimization with brute force for simple cases
 - [ ] decision optimization method using genetic algorithms
+- [ ] use gradle modules for exposing only main aggregate class for simulation (use of internal access modifier)

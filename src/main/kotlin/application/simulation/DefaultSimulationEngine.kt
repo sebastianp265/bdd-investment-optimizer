@@ -1,7 +1,9 @@
 package com.github.sebastianp265.application.simulation
 
 import com.github.sebastianp265.application.strategy.InvestmentStrategy
-import com.github.sebastianp265.domain.model.*
+import com.github.sebastianp265.domain.value.Month
+import com.github.sebastianp265.domain.model.InvestmentWallet
+import com.github.sebastianp265.domain.snapshot.InvestmentWalletSnapshot
 
 class DefaultSimulationEngine(
     private val investmentWallet: InvestmentWallet,

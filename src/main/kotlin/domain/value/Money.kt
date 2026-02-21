@@ -1,4 +1,4 @@
-package com.github.sebastianp265.domain.model
+package com.github.sebastianp265.domain.value
 
 import java.math.BigDecimal
 import java.math.RoundingMode

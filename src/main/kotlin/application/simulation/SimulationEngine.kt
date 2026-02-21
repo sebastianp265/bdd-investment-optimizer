@@ -1,6 +1,6 @@
 package com.github.sebastianp265.application.simulation
 
-import com.github.sebastianp265.domain.model.InvestmentWalletSnapshot
+import com.github.sebastianp265.domain.snapshot.InvestmentWalletSnapshot
 
 interface SimulationEngine {
     fun step()
