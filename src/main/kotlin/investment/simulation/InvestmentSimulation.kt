@@ -1,14 +1,18 @@
-package com.github.sebastianp265.investment
+package com.github.sebastianp265.investment.simulation
 
 import com.github.sebastianp265.graph.StateGraph
 import com.github.sebastianp265.graph.Transition
 import com.github.sebastianp265.investment.common.Money
 import com.github.sebastianp265.investment.common.Month
+import com.github.sebastianp265.investment.logic.InvestmentLogic
+import com.github.sebastianp265.investment.model.InvestmentDecision
+import com.github.sebastianp265.investment.model.InvestmentType
+import com.github.sebastianp265.investment.state.InvestmentSimulationState
 
 class InvestmentSimulation(
     private val finalMonth: Month,
-    private val availableInvestmentTypes: List<InvestmentType>,
-    private val monthlyDeposit: Money = Money.ZERO
+    private val availableAccounts: List<InvestmentType>,
+    private val monthlyDeposit: Money = Money.ZERO,
 ) : StateGraph<InvestmentSimulationState, InvestmentDecision> {
 
     override fun possibleTransitions(state: InvestmentSimulationState): List<Transition<InvestmentSimulationState, InvestmentDecision>> {
@@ -27,7 +31,7 @@ class InvestmentSimulation(
         return InvestmentLogic.createTransition(
             listOf(InvestmentDecision.DoNothing),
             state,
-            monthlyDeposit
+            monthlyDeposit,
         )
     }
 
@@ -36,12 +40,12 @@ class InvestmentSimulation(
             return emptyList()
         }
 
-        return availableInvestmentTypes.map { account ->
+        return availableAccounts.map { account ->
             val decision = InvestmentDecision.Invest(account, state.availableCash)
             InvestmentLogic.createTransition(
                 listOf(decision),
                 state,
-                monthlyDeposit
+                monthlyDeposit,
             )
         }
     }
@@ -55,17 +59,17 @@ class InvestmentSimulation(
             add(InvestmentLogic.createTransition(
                 listOf(InvestmentDecision.Withdraw),
                 state,
-                monthlyDeposit
+                monthlyDeposit,
             ))
 
             val stateAfterWithdraw = InvestmentLogic.applyWithdrawDecision(state)
             if (stateAfterWithdraw.availableCash > Money.ZERO) {
-                availableInvestmentTypes.forEach { account ->
+                availableAccounts.forEach { account ->
                     val investDecision = InvestmentDecision.Invest(account, stateAfterWithdraw.availableCash)
                     add(InvestmentLogic.createTransition(
                         listOf(InvestmentDecision.Withdraw, investDecision),
                         state,
-                        monthlyDeposit
+                        monthlyDeposit,
                     ))
                 }
             }

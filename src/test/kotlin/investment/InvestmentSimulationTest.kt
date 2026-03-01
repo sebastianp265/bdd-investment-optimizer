@@ -1,11 +1,15 @@
 package investment
 
-import com.github.sebastianp265.investment.*
 import com.github.sebastianp265.investment.common.Money
 import com.github.sebastianp265.investment.common.Month
 import com.github.sebastianp265.investment.common.Rate
+import com.github.sebastianp265.investment.model.FixedRateType
+import com.github.sebastianp265.investment.model.InvestmentDecision
+import com.github.sebastianp265.investment.simulation.InvestmentSimulation
+import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import com.github.sebastianp265.optimizer.DFSOptimizationEngine
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.types.shouldBeInstanceOf
 import java.math.BigDecimal
@@ -21,8 +25,8 @@ class InvestmentSimulationTest : FunSpec({
 
         val simulation = InvestmentSimulation(
             finalMonth = Month(3),
-            availableInvestmentTypes = listOf(savingsAccountTemplate),
-            monthlyDeposit = monthlyDeposit
+            availableAccounts = listOf(savingsAccountTemplate),
+            monthlyDeposit = monthlyDeposit,
         )
 
         val initialState = InvestmentSimulationState(

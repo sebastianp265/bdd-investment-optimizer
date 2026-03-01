@@ -1,10 +1,14 @@
 package investment
 
-import com.github.sebastianp265.investment.*
 import com.github.sebastianp265.investment.common.Money
 import com.github.sebastianp265.investment.common.Month
 import com.github.sebastianp265.investment.common.Rate
+import com.github.sebastianp265.investment.model.InvestmentDecision
+import com.github.sebastianp265.investment.model.PersonBoundPromotionalType
+import com.github.sebastianp265.investment.simulation.InvestmentSimulationRunner
+import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.comparables.shouldBeLessThanOrEqualTo
 import io.kotest.matchers.shouldBe
 import java.math.BigDecimal
 import java.math.RoundingMode

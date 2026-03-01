@@ -1,4 +1,4 @@
-package com.github.sebastianp265.investment
+package com.github.sebastianp265.investment.model
 
 import com.github.sebastianp265.investment.common.Money
 
