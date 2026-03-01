@@ -17,15 +17,11 @@ class InvestmentSimulationTest : FunSpec({
         val initialCash = Money(BigDecimal("20000.00"))
         val monthlyDeposit = Money(BigDecimal("1000.00"))
         val rate = BigDecimal("0.05")
-        val savingsAccount = FixedRateInvestment(
-            principal = Money.ZERO,
-            investmentMonth = Month.ZERO,
-            rate = Rate(rate)
-        )
+        val savingsAccountTemplate = FixedRateType(Rate(rate))
 
         val simulation = InvestmentSimulation(
             finalMonth = Month(3),
-            availableSavingsAccounts = listOf(savingsAccount),
+            availableInvestmentTypes = listOf(savingsAccountTemplate),
             monthlyDeposit = monthlyDeposit
         )
 

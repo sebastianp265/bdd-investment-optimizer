@@ -82,9 +82,9 @@ class DFSOptimizationEngineTest : FunSpec({
         // DFS visits all 2^4 = 16 terminal states from a binary tree of depth 4
         // Order: LLLL, LLLR, LLRL, LLRR, LRLL, ... RRRR
         visitedTerminalStates.size shouldBe 16
-        visitedTerminalStates[0] shouldBe "LLLL"  // DFS goes left first
-        visitedTerminalStates[1] shouldBe "LLLR"  // Then backtracks and goes right
-        visitedTerminalStates.last() shouldBe "RRRR"  // Last is all right
+        visitedTerminalStates[0] shouldBe "LLLL"
+        visitedTerminalStates[1] shouldBe "LLLR"
+        visitedTerminalStates.last() shouldBe "RRRR"
     }
 
 })

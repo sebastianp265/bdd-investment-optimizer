@@ -26,16 +26,29 @@ object InvestmentLogic {
         state: InvestmentSimulationState,
         monthlyDeposit: Money
     ): InvestmentSimulationState {
-        val nextMonth = state.currentMonth + Month.ONE
-
         val updatedInvestments = state.investments.map { investment ->
-            when(investment) {
+            when (investment) {
                 is FixedRateInvestment -> {
                     val newPrincipal = investment.principal * (BigDecimal.ONE + (investment.rate / 12).value)
                     investment.copy(principal = newPrincipal)
                 }
+
+                is PersonBoundPromotionalInvestment -> {
+                    val promotionStartMonth = state.promotionStartMonths[investment.template]!!
+                    val monthsElapsed = state.currentMonth.index - promotionStartMonth.index
+
+                    val applicableRate = if (monthsElapsed < investment.template.promotionDurationMonths) {
+                        investment.template.promotionalRate
+                    } else {
+                        investment.template.rate
+                    }
+                    val newPrincipal = investment.principal * (BigDecimal.ONE + (applicableRate / 12).value)
+                    investment.copy(principal = newPrincipal)
+                }
             }
         }
+
+        val nextMonth = state.currentMonth + Month.ONE
 
         return state.copy(
             currentMonth = nextMonth,
@@ -52,17 +65,34 @@ object InvestmentLogic {
             "Cannot invest ${decision.amount} when only ${state.availableCash} is available"
         }
 
-        val newInvestment = when (val template = decision.investment) {
-            is FixedRateInvestment -> FixedRateInvestment(
+        val newInvestment = when (val type = decision.investmentType) {
+            is FixedRateType -> FixedRateInvestment(
                 principal = decision.amount,
                 investmentMonth = state.currentMonth,
-                rate = template.rate
+                rate = type.rate
             )
+
+            is PersonBoundPromotionalType -> {
+                PersonBoundPromotionalInvestment(
+                    principal = decision.amount,
+                    investmentMonth = state.currentMonth,
+                    template = type
+                )
+            }
+        }
+
+        val updatedPromotionStartMonths = if (decision.investmentType is PersonBoundPromotionalType &&
+            !state.promotionStartMonths.containsKey(decision.investmentType)
+        ) {
+            state.promotionStartMonths + (decision.investmentType to state.currentMonth)
+        } else {
+            state.promotionStartMonths
         }
 
         return state.copy(
             availableCash = state.availableCash - decision.amount,
-            investments = state.investments + newInvestment
+            investments = state.investments + newInvestment,
+            promotionStartMonths = updatedPromotionStartMonths
         )
     }
 

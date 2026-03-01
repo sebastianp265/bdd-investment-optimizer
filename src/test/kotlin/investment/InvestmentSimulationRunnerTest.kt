@@ -18,11 +18,7 @@ class InvestmentSimulationRunnerTest : FunSpec({
         val monthlyDeposit = Money(BigDecimal("1000.00"))
         val rate = Rate(BigDecimal("0.05"))
 
-        val savingsAccount = FixedRateInvestment(
-            principal = Money.ZERO,
-            investmentMonth = Month.ZERO,
-            rate = rate
-        )
+        val savingsAccountTemplate = FixedRateType(rate)
 
         val initialState = InvestmentSimulationState(
             currentMonth = Month.ZERO,
@@ -31,7 +27,7 @@ class InvestmentSimulationRunnerTest : FunSpec({
         )
 
         val decisions = listOf(
-            listOf(InvestmentDecision.Invest(savingsAccount, initialCash)),
+            listOf(InvestmentDecision.Invest(savingsAccountTemplate, initialCash)),
             listOf(InvestmentDecision.DoNothing),
             listOf(InvestmentDecision.DoNothing)
         )
@@ -82,11 +78,8 @@ class InvestmentSimulationRunnerTest : FunSpec({
         val initialCash = Money(BigDecimal("20000.00"))
         val monthlyDeposit = Money(BigDecimal("1000.00"))
         val rate = BigDecimal("0.05")
-        val savingsAccount = FixedRateInvestment(
-            principal = Money.ZERO,
-            investmentMonth = Month.ZERO,
-            rate = Rate(rate)
-        )
+        val savingsAccountTemplate = FixedRateType(Rate(rate))
+
         val initialState = InvestmentSimulationState(
             currentMonth = Month.ZERO,
             availableCash = initialCash,
@@ -102,9 +95,9 @@ class InvestmentSimulationRunnerTest : FunSpec({
         val actualState = InvestmentSimulationRunner.replay(
             initialState,
             listOf(
-                listOf(InvestmentDecision.Invest(savingsAccount, initialCash)),
-                listOf(InvestmentDecision.Invest(savingsAccount, monthlyDeposit)),
-                listOf(InvestmentDecision.Invest(savingsAccount, monthlyDeposit))
+                listOf(InvestmentDecision.Invest(savingsAccountTemplate, initialCash)),
+                listOf(InvestmentDecision.Invest(savingsAccountTemplate, monthlyDeposit)),
+                listOf(InvestmentDecision.Invest(savingsAccountTemplate, monthlyDeposit))
             ),
             monthlyDeposit
         )

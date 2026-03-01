@@ -7,7 +7,7 @@ import com.github.sebastianp265.investment.common.Month
 
 class InvestmentSimulation(
     private val finalMonth: Month,
-    private val availableSavingsAccounts: List<FixedRateInvestment>,
+    private val availableInvestmentTypes: List<InvestmentType>,
     private val monthlyDeposit: Money = Money.ZERO
 ) : StateGraph<InvestmentSimulationState, InvestmentDecision> {
 
@@ -36,7 +36,7 @@ class InvestmentSimulation(
             return emptyList()
         }
 
-        return availableSavingsAccounts.map { account ->
+        return availableInvestmentTypes.map { account ->
             val decision = InvestmentDecision.Invest(account, state.availableCash)
             InvestmentLogic.createTransition(
                 listOf(decision),
@@ -60,7 +60,7 @@ class InvestmentSimulation(
 
             val stateAfterWithdraw = InvestmentLogic.applyWithdrawDecision(state)
             if (stateAfterWithdraw.availableCash > Money.ZERO) {
-                availableSavingsAccounts.forEach { account ->
+                availableInvestmentTypes.forEach { account ->
                     val investDecision = InvestmentDecision.Invest(account, stateAfterWithdraw.availableCash)
                     add(InvestmentLogic.createTransition(
                         listOf(InvestmentDecision.Withdraw, investDecision),
