@@ -1,4 +1,4 @@
-package investment
+package investment.simulation
 
 import com.github.sebastianp265.investment.common.Money
 import com.github.sebastianp265.investment.common.Month
@@ -29,7 +29,7 @@ class InvestmentSimulationTest : FunSpec({
         )
 
         val initialState = InvestmentSimulationState(
-            currentMonth = Month.ZERO,
+            currentMonth = Month.Companion.ZERO,
             availableCash = initialCash,
             investments = emptyList()
         )
@@ -54,4 +54,3 @@ class InvestmentSimulationTest : FunSpec({
     }
 
 })
-

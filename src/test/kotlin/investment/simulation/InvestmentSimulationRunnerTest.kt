@@ -1,4 +1,4 @@
-package investment
+package investment.simulation
 
 import com.github.sebastianp265.investment.common.Money
 import com.github.sebastianp265.investment.common.Month
@@ -6,6 +6,7 @@ import com.github.sebastianp265.investment.common.Rate
 import com.github.sebastianp265.investment.model.FixedRateInvestment
 import com.github.sebastianp265.investment.model.FixedRateType
 import com.github.sebastianp265.investment.model.InvestmentDecision
+import com.github.sebastianp265.investment.model.PersonBoundPromotionalType
 import com.github.sebastianp265.investment.simulation.InvestmentSimulationRunner
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import io.kotest.core.spec.style.FunSpec
@@ -25,7 +26,7 @@ class InvestmentSimulationRunnerTest : FunSpec({
         val savingsAccountTemplate = FixedRateType(rate)
 
         val initialState = InvestmentSimulationState(
-            currentMonth = Month.ZERO,
+            currentMonth = Month.Companion.ZERO,
             availableCash = initialCash,
             investments = emptyList()
         )
@@ -53,12 +54,12 @@ class InvestmentSimulationRunnerTest : FunSpec({
 
         val savingsAccount = FixedRateInvestment(
             principal = Money(BigDecimal("5000.00")),
-            investmentMonth = Month.ZERO,
+            investmentMonth = Month.Companion.ZERO,
             rate = rate
         )
 
         val initialState = InvestmentSimulationState(
-            currentMonth = Month.ZERO,
+            currentMonth = Month.Companion.ZERO,
             availableCash = initialCash,
             investments = listOf(savingsAccount)
         )
@@ -70,7 +71,7 @@ class InvestmentSimulationRunnerTest : FunSpec({
         val finalState = InvestmentSimulationRunner.replay(
             initialState,
             decisions,
-            Money.ZERO
+            Money.Companion.ZERO
         )
 
         finalState.currentMonth shouldBe Month(1)
@@ -85,7 +86,7 @@ class InvestmentSimulationRunnerTest : FunSpec({
         val savingsAccountTemplate = FixedRateType(Rate(rate))
 
         val initialState = InvestmentSimulationState(
-            currentMonth = Month.ZERO,
+            currentMonth = Month.Companion.ZERO,
             availableCash = initialCash,
             investments = emptyList()
         )
@@ -112,5 +113,50 @@ class InvestmentSimulationRunnerTest : FunSpec({
         actualState.totalValue().value shouldBeEqual expectedValue
     }
 
-})
+    test("promotional account applies bonus rate for first 3 months, then normal rate") {
+        val initialCash = Money(BigDecimal("10000.00"))
+        val normalRate = Rate(BigDecimal("0.03"))
+        val promotionalRate = Rate(BigDecimal("0.08"))
+        val promotionDurationMonths = Month(3)
 
+        val promotionalType = PersonBoundPromotionalType(
+            rate = normalRate,
+            promotionalRate = promotionalRate,
+            promotionDurationMonths = promotionDurationMonths
+        )
+
+        val initialState = InvestmentSimulationState(
+            currentMonth = Month.ZERO,
+            availableCash = initialCash,
+            investments = emptyList()
+        )
+
+        val monthlyPromoRate = (promotionalRate / 12).value
+        val monthlyNormalRate = (normalRate / 12).value
+
+        var value = BigDecimal("10000.00")
+        value *= (BigDecimal.ONE + monthlyPromoRate)
+        value *= (BigDecimal.ONE + monthlyPromoRate)
+        value *= (BigDecimal.ONE + monthlyPromoRate)
+        value *= (BigDecimal.ONE + monthlyNormalRate)
+
+        val expectedValue = value.setScale(2, RoundingMode.HALF_UP)
+
+        val decisions = listOf(
+            listOf(InvestmentDecision.Invest(promotionalType, initialCash)),
+            listOf(InvestmentDecision.DoNothing),
+            listOf(InvestmentDecision.DoNothing),
+            listOf(InvestmentDecision.DoNothing),
+        )
+
+        val finalState = InvestmentSimulationRunner.replay(
+            initialState,
+            decisions,
+            Money.ZERO
+        )
+
+        finalState.currentMonth shouldBe Month(4)
+        finalState.totalValue().value shouldBe expectedValue
+    }
+
+})
