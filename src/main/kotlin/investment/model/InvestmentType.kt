@@ -14,6 +14,6 @@ data class FixedRateType(
 data class PersonBoundPromotionalType(
     override val rate: Rate,
     val promotionalRate: Rate,
-    val promotionDurationMonths: Int,
+    val promotionDurationMonths: Month,
 ) : InvestmentType()
 

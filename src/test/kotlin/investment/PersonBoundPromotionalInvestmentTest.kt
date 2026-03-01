@@ -8,7 +8,6 @@ import com.github.sebastianp265.investment.model.PersonBoundPromotionalType
 import com.github.sebastianp265.investment.simulation.InvestmentSimulationRunner
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.comparables.shouldBeLessThanOrEqualTo
 import io.kotest.matchers.shouldBe
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -19,7 +18,7 @@ class PersonBoundPromotionalInvestmentTest : FunSpec({
         val initialCash = Money(BigDecimal("10000.00"))
         val normalRate = Rate(BigDecimal("0.03"))
         val promotionalRate = Rate(BigDecimal("0.08"))
-        val promotionDurationMonths = 3
+        val promotionDurationMonths = Month(3)
 
         val promotionalType = PersonBoundPromotionalType(
             rate = normalRate,

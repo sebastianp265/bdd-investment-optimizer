@@ -41,7 +41,7 @@ object InvestmentLogic {
                 }
                 is PersonBoundPromotionalInvestment -> {
                     val promotionStartMonth = state.promotionStartMonths[investment.template]!!
-                    val monthsElapsed = state.currentMonth.index - promotionStartMonth.index
+                    val monthsElapsed = state.currentMonth - promotionStartMonth
 
                     val applicableRate = if (monthsElapsed < investment.template.promotionDurationMonths) {
                         investment.template.promotionalRate

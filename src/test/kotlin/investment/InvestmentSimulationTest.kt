@@ -9,7 +9,6 @@ import com.github.sebastianp265.investment.simulation.InvestmentSimulation
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import com.github.sebastianp265.optimizer.DFSOptimizationEngine
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.types.shouldBeInstanceOf
 import java.math.BigDecimal

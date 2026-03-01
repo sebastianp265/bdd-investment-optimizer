@@ -9,9 +9,7 @@ import com.github.sebastianp265.investment.model.InvestmentDecision
 import com.github.sebastianp265.investment.simulation.InvestmentSimulationRunner
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.shouldBe
-import java.math.BigDecimal
-import java.math.RoundingMode
+import io.kotest.matchers.bigdecimal.shouldBeGreaterThan
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.shouldBe
 import java.math.BigDecimal

@@ -56,21 +56,25 @@ class InvestmentSimulation(
         }
 
         return buildList {
-            add(InvestmentLogic.createTransition(
-                listOf(InvestmentDecision.Withdraw),
-                state,
-                monthlyDeposit,
-            ))
+            add(
+                InvestmentLogic.createTransition(
+                    listOf(InvestmentDecision.Withdraw),
+                    state,
+                    monthlyDeposit,
+                )
+            )
 
             val stateAfterWithdraw = InvestmentLogic.applyWithdrawDecision(state)
             if (stateAfterWithdraw.availableCash > Money.ZERO) {
                 availableAccounts.forEach { account ->
                     val investDecision = InvestmentDecision.Invest(account, stateAfterWithdraw.availableCash)
-                    add(InvestmentLogic.createTransition(
-                        listOf(InvestmentDecision.Withdraw, investDecision),
-                        state,
-                        monthlyDeposit,
-                    ))
+                    add(
+                        InvestmentLogic.createTransition(
+                            listOf(InvestmentDecision.Withdraw, investDecision),
+                            state,
+                            monthlyDeposit,
+                        )
+                    )
                 }
             }
         }
