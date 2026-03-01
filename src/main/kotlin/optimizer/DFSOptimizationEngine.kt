@@ -4,15 +4,17 @@ import com.github.sebastianp265.graph.StateGraph
 
 object DFSOptimizationEngine : OptimizationEngine {
 
-    override fun <S : Comparable<S>, A> optimize(
-        stateGraph: StateGraph<S, A>,
+    override fun <S : Comparable<S>, D> optimize(
+        stateGraph: StateGraph<S, D>,
         initialState: S
-    ): Pair<S, List<List<A>>> {
+    ): Pair<S, List<List<D>>> {
         var bestState = initialState
-        var bestSequenceOfTransitions: List<List<A>> = emptyList()
+        var bestSequenceOfTransitions: List<List<D>> = emptyList()
 
-        fun dfs(state: S, history: List<List<A>>) {
-            if (stateGraph.isTerminal(state)) {
+        fun dfs(state: S, history: List<List<D>>) {
+            val transitions = stateGraph.possibleTransitions(state)
+
+            if (transitions.isEmpty()) {
                 if (state > bestState) {
                     bestState = state
                     bestSequenceOfTransitions = history
@@ -20,10 +22,10 @@ object DFSOptimizationEngine : OptimizationEngine {
                 return
             }
 
-            for (transition in stateGraph.possibleTransitions(state)) {
+            for (transition in transitions) {
                 dfs(
                     transition.nextState,
-                    history + listOf(transition.actions)
+                    history + listOf(transition.decisions)
                 )
             }
         }

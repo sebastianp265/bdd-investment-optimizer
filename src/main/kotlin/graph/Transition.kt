@@ -1,6 +1,6 @@
 package com.github.sebastianp265.graph
 
-data class Transition<S, A>(
-    val actions: List<A>,
+data class Transition<S, D>(
+    val decisions: List<D>,
     val nextState: S
 )
