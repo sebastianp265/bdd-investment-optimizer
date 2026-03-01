@@ -1,6 +1,5 @@
 package com.github.sebastianp265.optimizer
 
-import com.github.sebastianp265.graph.State
 import com.github.sebastianp265.graph.StateGraph
 
 object DFSOptimizationEngine : OptimizationEngine {
@@ -14,7 +13,7 @@ object DFSOptimizationEngine : OptimizationEngine {
 
         fun dfs(state: S, history: List<List<A>>) {
             if (stateGraph.isTerminal(state)) {
-                if(state > bestState) {
+                if (state > bestState) {
                     bestState = state
                     bestSequenceOfTransitions = history
                 }
