@@ -27,5 +27,5 @@ kotlin {
 }
 
 application {
-    mainClass.set("com.github.sebastianp265.InvestmentOptimizerCLIKt")
+    mainClass.set("com.github.sebastianp265.MainKt")
 }

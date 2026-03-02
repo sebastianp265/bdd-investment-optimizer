@@ -1,4 +1,4 @@
-package com.github.sebastianp265
+package com.github.sebastianp265.cli
 
 import com.github.sebastianp265.investment.model.FixedRateType
 import com.github.sebastianp265.investment.model.InvestmentDecision
@@ -106,10 +106,3 @@ object InvestmentOptimizerPrinter {
         }
     }
 }
-
-
-
-
-
-
-

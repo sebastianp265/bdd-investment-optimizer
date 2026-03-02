@@ -1,4 +1,4 @@
-package com.github.sebastianp265
+package com.github.sebastianp265.cli
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
@@ -51,7 +51,7 @@ class InvestmentOptimizerCLI : CliktCommand(help = "Optimize investment strategy
             monthlyDeposit = Money(monthlyDeposit),
         )
         val initialState = InvestmentSimulationState(
-            currentMonth = Month.ZERO,
+            currentMonth = Month.Companion.ZERO,
             availableCash = Money(initialCash),
             investments = emptyList(),
         )
@@ -74,6 +74,3 @@ class InvestmentOptimizerCLI : CliktCommand(help = "Optimize investment strategy
         )
     }
 }
-
-fun main(args: Array<String>) = InvestmentOptimizerCLI().main(args)
-
