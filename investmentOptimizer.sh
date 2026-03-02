@@ -1,0 +1,8 @@
+#!/bin/bash
+cd "$(dirname "$0")" || exit 1
+
+if [ $# -eq 0 ]; then
+    ./gradlew run
+else
+    ./gradlew run --args="$*"
+fi
