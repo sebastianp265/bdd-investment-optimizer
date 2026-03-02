@@ -3,12 +3,7 @@ package com.github.sebastianp265.investment.logic
 import com.github.sebastianp265.graph.Transition
 import com.github.sebastianp265.investment.common.Money
 import com.github.sebastianp265.investment.common.Month
-import com.github.sebastianp265.investment.model.FixedRateInvestment
-import com.github.sebastianp265.investment.model.FixedRateType
-import com.github.sebastianp265.investment.model.InvestmentDecision
-import com.github.sebastianp265.investment.model.InvestmentType
-import com.github.sebastianp265.investment.model.PersonBoundPromotionalInvestment
-import com.github.sebastianp265.investment.model.PersonBoundPromotionalType
+import com.github.sebastianp265.investment.model.*
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import java.math.BigDecimal
 
@@ -39,6 +34,7 @@ object InvestmentLogic {
                     val newPrincipal = investment.principal * (BigDecimal.ONE + (investment.rate / 12).value)
                     investment.copy(principal = newPrincipal)
                 }
+
                 is PersonBoundPromotionalInvestment -> {
                     val promotionStartMonth = state.promotionStartMonths[investment.template]!!
                     val monthsElapsed = state.currentMonth - promotionStartMonth
@@ -77,6 +73,7 @@ object InvestmentLogic {
                 investmentMonth = state.currentMonth,
                 rate = type.rate,
             )
+
             is PersonBoundPromotionalType -> {
                 PersonBoundPromotionalInvestment(
                     principal = decision.amount,

@@ -47,6 +47,10 @@ class InvestmentSimulationRunnerTest : FunSpec({
         finalState.currentMonth shouldBe Month(3)
         finalState.investments.size shouldBe 1
         finalState.availableCash.value shouldBe monthlyDeposit.value.multiply(BigDecimal("3"))
+        finalState.totalValue().value shouldBe (
+                initialCash.value * (BigDecimal.ONE + (rate / 12).value).pow(3)
+                        + monthlyDeposit.value * BigDecimal("3")
+                ).setScale(2, RoundingMode.HALF_UP)
     }
 
     test("replay handles withdraw decision") {
