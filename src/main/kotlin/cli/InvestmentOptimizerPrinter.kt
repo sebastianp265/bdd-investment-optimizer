@@ -1,9 +1,10 @@
 package com.github.sebastianp265.cli
 
-import com.github.sebastianp265.investment.model.FixedRateType
-import com.github.sebastianp265.investment.model.InvestmentDecision
-import com.github.sebastianp265.investment.model.InvestmentType
-import com.github.sebastianp265.investment.model.PersonBoundPromotionalType
+import com.github.sebastianp265.investment.logic.InvestmentDecision
+import com.github.sebastianp265.investment.model.type.FixedRateInvestmentType
+import com.github.sebastianp265.investment.model.type.InvestmentType
+import com.github.sebastianp265.investment.model.type.PersonBoundPromotionalInvestmentType
+import com.github.sebastianp265.investment.model.type.VariableRateBondInvestmentType
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import java.math.BigDecimal
 
@@ -85,18 +86,21 @@ object InvestmentOptimizerPrinter {
 
     private fun formatInvestmentType(type: InvestmentType): String {
         return when (type) {
-            is FixedRateType ->
+            is FixedRateInvestmentType ->
                 "Regular Account: ${type.rate.value.toPercent()}% APR"
 
-            is PersonBoundPromotionalType ->
+            is PersonBoundPromotionalInvestmentType ->
                 "Promotional Account: ${type.promotionalRate.value.toPercent()}% APR for first ${type.promotionDurationMonths.index} months, then ${type.rate.value.toPercent()}% APR"
+
+            is VariableRateBondInvestmentType ->
+                "Variable Rate Bond: ${type.firstPeriodRate.value.toPercent()}% (month 1), then base ${type.baseRate.value.toPercent()}% + ${type.margin.value.toPercent()}% margin, duration ${type.durationMonths.index} months, penalty ${type.earlyRedemptionPenaltyRate.value.toPercent()}%"
         }
     }
 
     private fun formatDecision(decision: InvestmentDecision): String {
         return when (decision) {
-            is InvestmentDecision.Invest ->
-                "Invest ${decision.amount.value.toMoney()} in ${formatInvestmentType(decision.investmentType)}"
+            is InvestmentDecision.InvestAll ->
+                "Invest all in ${formatInvestmentType(decision.investmentType)}"
 
             is InvestmentDecision.Withdraw ->
                 "Withdraw all investments"

@@ -4,9 +4,9 @@ import com.github.sebastianp265.graph.StateGraph
 import com.github.sebastianp265.graph.Transition
 import com.github.sebastianp265.investment.common.Money
 import com.github.sebastianp265.investment.common.Month
+import com.github.sebastianp265.investment.logic.InvestmentDecision
 import com.github.sebastianp265.investment.logic.InvestmentLogic
-import com.github.sebastianp265.investment.model.InvestmentDecision
-import com.github.sebastianp265.investment.model.InvestmentType
+import com.github.sebastianp265.investment.model.type.InvestmentType
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 
 class InvestmentSimulation(
@@ -41,7 +41,7 @@ class InvestmentSimulation(
         }
 
         return availableInvestmentTypes.map { account ->
-            val decision = InvestmentDecision.Invest(account, state.availableCash)
+            val decision = InvestmentDecision.InvestAll(account)
             InvestmentLogic.createTransition(
                 listOf(decision),
                 state,
@@ -67,10 +67,10 @@ class InvestmentSimulation(
             val stateAfterWithdraw = InvestmentLogic.applyWithdrawDecision(state)
             if (stateAfterWithdraw.availableCash > Money.ZERO) {
                 availableInvestmentTypes.forEach { account ->
-                    val investDecision = InvestmentDecision.Invest(account, stateAfterWithdraw.availableCash)
+                    val investAllDecision = InvestmentDecision.InvestAll(account)
                     add(
                         InvestmentLogic.createTransition(
-                            listOf(InvestmentDecision.Withdraw, investDecision),
+                            listOf(InvestmentDecision.Withdraw, investAllDecision),
                             state,
                             monthlyDeposit,
                         )

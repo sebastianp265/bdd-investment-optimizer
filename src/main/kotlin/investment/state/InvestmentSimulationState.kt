@@ -3,7 +3,7 @@ package com.github.sebastianp265.investment.state
 import com.github.sebastianp265.investment.common.Money
 import com.github.sebastianp265.investment.common.Month
 import com.github.sebastianp265.investment.model.Investment
-import com.github.sebastianp265.investment.model.InvestmentType
+import com.github.sebastianp265.investment.model.type.InvestmentType
 
 data class InvestmentSimulationState(
     val currentMonth: Month,

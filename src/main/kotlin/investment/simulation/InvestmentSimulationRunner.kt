@@ -1,8 +1,8 @@
 package com.github.sebastianp265.investment.simulation
 
 import com.github.sebastianp265.investment.common.Money
+import com.github.sebastianp265.investment.logic.InvestmentDecision
 import com.github.sebastianp265.investment.logic.InvestmentLogic
-import com.github.sebastianp265.investment.model.InvestmentDecision
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 
 object InvestmentSimulationRunner {

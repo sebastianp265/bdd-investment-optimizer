@@ -3,6 +3,8 @@ package com.github.sebastianp265.investment.common
 import java.math.BigDecimal
 import java.math.RoundingMode
 
+fun BigDecimal.toMoney() = Money(this.setScale(2, RoundingMode.HALF_UP))
+
 @JvmInline
 value class Money(val value: BigDecimal) : Comparable<Money> {
 

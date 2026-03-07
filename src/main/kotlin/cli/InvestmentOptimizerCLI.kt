@@ -8,8 +8,9 @@ import com.github.ajalt.clikt.parameters.types.int
 import com.github.sebastianp265.investment.common.Money
 import com.github.sebastianp265.investment.common.Month
 import com.github.sebastianp265.investment.common.Rate
-import com.github.sebastianp265.investment.model.FixedRateType
-import com.github.sebastianp265.investment.model.PersonBoundPromotionalType
+import com.github.sebastianp265.investment.model.type.FixedRateInvestmentType
+import com.github.sebastianp265.investment.model.type.PersonBoundPromotionalInvestmentType
+import com.github.sebastianp265.investment.model.type.VariableRateBondInvestmentType
 import com.github.sebastianp265.investment.simulation.InvestmentSimulation
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import com.github.sebastianp265.optimizer.DFSOptimizationEngine
@@ -38,12 +39,19 @@ class InvestmentOptimizerCLI : CliktCommand(help = "Optimize investment strategy
 
     override fun run() {
         val availableInvestmentTypes = listOf(
-            FixedRateType(Rate(BigDecimal("0.02"))),
-            PersonBoundPromotionalType(
+            FixedRateInvestmentType(Rate(BigDecimal("0.02"))),
+            PersonBoundPromotionalInvestmentType(
                 rate = Rate(BigDecimal("0.01")),
                 promotionalRate = Rate(BigDecimal("0.05")),
                 promotionDurationMonths = Month(3),
-            )
+            ),
+            VariableRateBondInvestmentType(
+                firstPeriodRate = Rate(BigDecimal("0.044")),
+                baseRate = Rate(BigDecimal("0.04")),
+                margin = Rate(BigDecimal("0.0015")),
+                durationMonths = Month(24),
+                earlyRedemptionPenaltyRate = Rate(BigDecimal("0.007")),
+            ),
         )
         val simulation = InvestmentSimulation(
             finalMonth = Month(months),
