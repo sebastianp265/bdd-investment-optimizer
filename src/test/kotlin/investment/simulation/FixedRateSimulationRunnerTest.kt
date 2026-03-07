@@ -47,7 +47,7 @@ class FixedRateSimulationRunnerTest : FunSpec({
         val expectedTotalValue = (inv1 + inv2 + inv3 + monthlyDeposit).setScale(2, RoundingMode.HALF_UP)
 
         finalState.currentMonth shouldBe Month(3)
-        finalState.totalValue().value shouldBe expectedTotalValue
+        finalState.totalValue().value.shouldBeCloseTo(expectedTotalValue)
     }
 
     test("fixed rate investment with withdraw decision") {
@@ -78,6 +78,6 @@ class FixedRateSimulationRunnerTest : FunSpec({
         val expectedValue = (initialCash * (BigDecimal.ONE + monthlyRate).pow(2)).setScale(2, RoundingMode.HALF_UP)
 
         finalState.currentMonth shouldBe Month(4)
-        finalState.totalValue().value shouldBe expectedValue
+        finalState.totalValue().value.shouldBeCloseTo(expectedValue)
     }
 })

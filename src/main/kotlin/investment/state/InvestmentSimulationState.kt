@@ -3,6 +3,7 @@ package com.github.sebastianp265.investment.state
 import com.github.sebastianp265.investment.common.Money
 import com.github.sebastianp265.investment.common.Month
 import com.github.sebastianp265.investment.model.Investment
+import com.github.sebastianp265.investment.model.VariableRateBondInvestment
 import com.github.sebastianp265.investment.model.type.InvestmentType
 
 data class InvestmentSimulationState(
@@ -16,6 +17,15 @@ data class InvestmentSimulationState(
         return totalValue().compareTo(other.totalValue())
     }
 
-    fun totalValue(): Money = availableCash + investments.fold(Money.ZERO) { acc, inv -> acc + inv.currentValue() }
-}
+    fun totalValue(): Money = availableCash + investments.fold(Money.ZERO) { acc, inv ->
+        acc + when (inv) {
+            is VariableRateBondInvestment -> {
+                val penalty = inv.principal * inv.type.earlyRedemptionPenaltyRate.value
+                val payout = inv.principal + inv.accruedInterest - penalty
+                if (payout < inv.principal) inv.principal else payout
+            }
 
+            else -> inv.currentValue()
+        }
+    }
+}

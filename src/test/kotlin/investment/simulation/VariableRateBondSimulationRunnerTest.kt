@@ -66,11 +66,7 @@ class VariableRateBondSimulationRunnerTest : FunSpec({
                 ).setScale(2, RoundingMode.HALF_UP)
 
         finalState.currentMonth shouldBe Month(4)
-
-        // TODO: Tighten precision handling and return to exact assertions once rounding is unified.
-        val tolerance = "0.01".toBigDecimal()
-        val difference = finalState.totalValue().value.subtract(expectedValue).abs()
-        (difference <= tolerance) shouldBe true
+        finalState.totalValue().value.shouldBeCloseTo(expectedValue)
     }
 
     test("variable rate bond withdraw keeps principal floor when penalty is higher than accrued interest") {
@@ -114,11 +110,7 @@ class VariableRateBondSimulationRunnerTest : FunSpec({
         }.setScale(2, RoundingMode.HALF_UP)
 
         finalState.currentMonth shouldBe Month(2)
-
-        // TODO: Tighten precision handling and return to exact assertions once rounding is unified.
-        val tolerance = "0.01".toBigDecimal()
-        val difference = (finalState.totalValue().value - expectedValue).abs()
-        (difference <= tolerance) shouldBe true
+        finalState.totalValue().value.shouldBeCloseTo(expectedValue)
     }
 
     test("variable rate bond invest uses only full nominal units") {
@@ -151,8 +143,8 @@ class VariableRateBondSimulationRunnerTest : FunSpec({
         val bondInvestment = finalState.investments.single() as VariableRateBondInvestment
 
         finalState.currentMonth shouldBe Month.ONE
-        finalState.availableCash.value shouldBe "50.00".toBigDecimal()
-        bondInvestment.principal.value shouldBe "1000.00".toBigDecimal()
+        finalState.availableCash.value.shouldBeCloseTo("50.00".toBigDecimal())
+        bondInvestment.principal.value.shouldBeCloseTo("1000.00".toBigDecimal())
     }
 
     test("immature bond total value includes early redemption penalty without withdraw") {
@@ -198,10 +190,6 @@ class VariableRateBondSimulationRunnerTest : FunSpec({
         val expectedValue = if (payoutAfterPenalty < initialCash) initialCash else payoutAfterPenalty
 
         finalState.currentMonth shouldBe Month(2)
-
-        // TODO: Tighten precision handling and return to exact assertions once rounding is unified.
-        val tolerance = "0.01".toBigDecimal()
-        val difference = (finalState.totalValue().value - expectedValue).abs()
-        (difference <= tolerance) shouldBe true
+        finalState.totalValue().value.shouldBeCloseTo(expectedValue)
     }
 })

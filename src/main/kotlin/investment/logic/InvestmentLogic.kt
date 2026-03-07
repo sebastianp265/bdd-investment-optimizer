@@ -88,25 +88,39 @@ object InvestmentLogic {
         state: InvestmentSimulationState,
         decision: InvestmentDecision.InvestAll,
     ): InvestmentSimulationState {
-        val newInvestment = when (val type = decision.investmentType) {
-            is FixedRateInvestmentType -> FixedRateInvestment(
-                principal = state.availableCash,
-                investmentMonth = state.currentMonth,
-                rate = type.rate,
-            )
+        val (newInvestment, remainingCash) = when (val type = decision.investmentType) {
+            is FixedRateInvestmentType -> {
+                val investment = FixedRateInvestment(
+                    principal = state.availableCash,
+                    investmentMonth = state.currentMonth,
+                    rate = type.rate,
+                )
+                investment to Money.ZERO
+            }
 
-            is PersonBoundPromotionalInvestmentType -> PersonBoundPromotionalInvestment(
-                principal = state.availableCash,
-                investmentMonth = state.currentMonth,
-                type = type,
-            )
+            is PersonBoundPromotionalInvestmentType -> {
+                val investment = PersonBoundPromotionalInvestment(
+                    principal = state.availableCash,
+                    investmentMonth = state.currentMonth,
+                    type = type,
+                )
+                investment to Money.ZERO
+            }
 
-            // TODO: This is wrong XD
-            is VariableRateBondInvestmentType -> VariableRateBondInvestment(
-                principal = state.availableCash,
-                investmentMonth = state.currentMonth,
-                type = type,
-            )
+            is VariableRateBondInvestmentType -> {
+                val nominal = BigDecimal("100")
+                val available = state.availableCash.value
+                val investablePrincipalValue =
+                    available.divideToIntegralValue(nominal).multiply(nominal).setScale(2)
+                val remainderValue = available.subtract(investablePrincipalValue).setScale(2)
+
+                val investment = VariableRateBondInvestment(
+                    principal = Money(investablePrincipalValue),
+                    investmentMonth = state.currentMonth,
+                    type = type,
+                )
+                investment to Money(remainderValue)
+            }
         }
 
         val updatedPromotionStartMonths = if (decision.investmentType is PersonBoundPromotionalInvestmentType &&
@@ -118,7 +132,7 @@ object InvestmentLogic {
         }
 
         return state.copy(
-            availableCash = Money.ZERO,
+            availableCash = remainingCash,
             investments = state.investments + newInvestment,
             promotionStartMonths = updatedPromotionStartMonths,
         )

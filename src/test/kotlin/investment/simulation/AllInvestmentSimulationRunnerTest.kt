@@ -63,11 +63,7 @@ class AllInvestmentSimulationRunnerTest : FunSpec({
             .setScale(2, RoundingMode.HALF_UP)
 
         finalState.currentMonth shouldBe Month(4)
-
-        // TODO: Unify rounding behavior across simulation and tests so we can return to exact 1:1 assertions.
-        val tolerance = "0.01".toBigDecimal()
-        val difference = finalState.totalValue().value.subtract(expectedValue).abs()
-        (difference <= tolerance) shouldBe true
+        finalState.totalValue().value.shouldBeCloseTo(expectedValue)
     }
 
 })
