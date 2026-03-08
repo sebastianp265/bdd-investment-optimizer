@@ -39,7 +39,7 @@ class InvestmentOptimizerCLI : CliktCommand(help = "Optimize investment strategy
 
     override fun run() {
         val availableInvestmentTypes = listOf(
-            FixedRateInvestmentType(Rate(BigDecimal("0.02"))),
+            FixedRateInvestmentType(Rate(BigDecimal("0.01"))),
             PersonBoundPromotionalInvestmentType(
                 rate = Rate(BigDecimal("0.01")),
                 promotionalRate = Rate(BigDecimal("0.05")),

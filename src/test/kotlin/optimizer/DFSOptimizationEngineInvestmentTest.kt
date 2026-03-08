@@ -11,8 +11,8 @@ import com.github.sebastianp265.investment.simulation.InvestmentSimulation
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import com.github.sebastianp265.optimizer.DFSOptimizationEngine
 import io.kotest.core.spec.style.FunSpec
-import io.kotest.matchers.bigdecimal.shouldBeLessThanOrEqual
 import io.kotest.matchers.shouldBe
+import shouldBeCloseTo
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -66,8 +66,7 @@ class DFSOptimizationEngineInvestmentTest : FunSpec({
 
         val expectedValue = inv2.setScale(2, RoundingMode.HALF_UP)
 
-        // TODO: To fix this: this should be precisely calculated, but currently logic handles savings account as separate investments, but they should be shared
-        (bestState.totalValue().value - expectedValue).abs() shouldBeLessThanOrEqual "0.01".toBigDecimal()
+        bestState.totalLiquidationValue().value.shouldBeCloseTo(expectedValue)
     }
 
 

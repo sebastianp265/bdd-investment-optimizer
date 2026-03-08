@@ -10,6 +10,7 @@ import com.github.sebastianp265.investment.simulation.InvestmentSimulationRunner
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import shouldBeCloseTo
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -63,7 +64,7 @@ class AllInvestmentSimulationRunnerTest : FunSpec({
             .setScale(2, RoundingMode.HALF_UP)
 
         finalState.currentMonth shouldBe Month(4)
-        finalState.totalValue().value.shouldBeCloseTo(expectedValue)
+        finalState.totalLiquidationValue().value.shouldBeCloseTo(expectedValue)
     }
 
 })

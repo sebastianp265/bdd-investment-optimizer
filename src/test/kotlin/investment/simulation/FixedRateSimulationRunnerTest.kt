@@ -10,6 +10,7 @@ import com.github.sebastianp265.investment.simulation.InvestmentSimulationRunner
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import shouldBeCloseTo
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -47,7 +48,7 @@ class FixedRateSimulationRunnerTest : FunSpec({
         val expectedTotalValue = (inv1 + inv2 + inv3 + monthlyDeposit).setScale(2, RoundingMode.HALF_UP)
 
         finalState.currentMonth shouldBe Month(3)
-        finalState.totalValue().value.shouldBeCloseTo(expectedTotalValue)
+        finalState.totalLiquidationValue().value.shouldBeCloseTo(expectedTotalValue)
     }
 
     test("fixed rate investment with withdraw decision") {
@@ -78,6 +79,6 @@ class FixedRateSimulationRunnerTest : FunSpec({
         val expectedValue = (initialCash * (BigDecimal.ONE + monthlyRate).pow(2)).setScale(2, RoundingMode.HALF_UP)
 
         finalState.currentMonth shouldBe Month(4)
-        finalState.totalValue().value.shouldBeCloseTo(expectedValue)
+        finalState.totalLiquidationValue().value.shouldBeCloseTo(expectedValue)
     }
 })

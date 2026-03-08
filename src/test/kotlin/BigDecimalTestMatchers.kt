@@ -1,5 +1,3 @@
-package investment.simulation
-
 import io.kotest.assertions.withClue
 import io.kotest.matchers.shouldBe
 import java.math.BigDecimal

@@ -10,6 +10,7 @@ import com.github.sebastianp265.investment.simulation.InvestmentSimulationRunner
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import shouldBeCloseTo
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -66,7 +67,7 @@ class VariableRateBondSimulationRunnerTest : FunSpec({
                 ).setScale(2, RoundingMode.HALF_UP)
 
         finalState.currentMonth shouldBe Month(4)
-        finalState.totalValue().value.shouldBeCloseTo(expectedValue)
+        finalState.totalLiquidationValue().value.shouldBeCloseTo(expectedValue)
     }
 
     test("variable rate bond withdraw keeps principal floor when penalty is higher than accrued interest") {
@@ -110,7 +111,7 @@ class VariableRateBondSimulationRunnerTest : FunSpec({
         }.setScale(2, RoundingMode.HALF_UP)
 
         finalState.currentMonth shouldBe Month(2)
-        finalState.totalValue().value.shouldBeCloseTo(expectedValue)
+        finalState.totalLiquidationValue().value.shouldBeCloseTo(expectedValue)
     }
 
     test("variable rate bond invest uses only full nominal units") {
@@ -190,6 +191,6 @@ class VariableRateBondSimulationRunnerTest : FunSpec({
         val expectedValue = if (payoutAfterPenalty < initialCash) initialCash else payoutAfterPenalty
 
         finalState.currentMonth shouldBe Month(2)
-        finalState.totalValue().value.shouldBeCloseTo(expectedValue)
+        finalState.totalLiquidationValue().value.shouldBeCloseTo(expectedValue)
     }
 })

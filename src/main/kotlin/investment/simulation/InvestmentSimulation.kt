@@ -64,8 +64,7 @@ class InvestmentSimulation(
                 )
             )
 
-            val stateAfterWithdraw = InvestmentLogic.applyWithdrawDecision(state)
-            if (stateAfterWithdraw.availableCash > Money.ZERO) {
+            if (state.totalLiquidationValue() > Money.ZERO) {
                 availableInvestmentTypes.forEach { account ->
                     val investAllDecision = InvestmentDecision.InvestAll(account)
                     add(

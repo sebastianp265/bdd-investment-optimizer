@@ -9,6 +9,7 @@ import com.github.sebastianp265.investment.simulation.InvestmentSimulationRunner
 import com.github.sebastianp265.investment.state.InvestmentSimulationState
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import shouldBeCloseTo
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -57,7 +58,7 @@ class PersonBoundPromotionalTypeRunnerTest : FunSpec({
         val expectedValue = (inv1 + inv2 + inv3 + inv4 + monthlyDeposit).setScale(2, RoundingMode.HALF_UP)
 
         finalState.currentMonth shouldBe Month(4)
-        finalState.totalValue().value.shouldBeCloseTo(expectedValue)
+        finalState.totalLiquidationValue().value.shouldBeCloseTo(expectedValue)
     }
 
 
@@ -103,6 +104,6 @@ class PersonBoundPromotionalTypeRunnerTest : FunSpec({
         val expectedValue = (inv2 + monthlyDeposit + monthlyDeposit).setScale(2, RoundingMode.HALF_UP)
 
         finalState.currentMonth shouldBe Month(4)
-        finalState.totalValue().value.shouldBeCloseTo(expectedValue)
+        finalState.totalLiquidationValue().value.shouldBeCloseTo(expectedValue)
     }
 })
